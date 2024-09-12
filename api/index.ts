@@ -1,8 +1,19 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
 import express, { Request, Response } from 'express';
+import logger from './config/logger-config';
+import RequestLogger from './middleware/request-logger';
+
 const app = express();
+const PORT: number = parseInt(process.env.PORT || '3010', 10);
 
-app.get("/", (req: Request, res: Response) => res.send("Sports da"));
+app.use(RequestLogger);
+app.use(express.json());
 
-app.listen(3000, () => console.log("Server ready on port 3000."));
+app.get("/", (req: Request, res: Response) => res.json({"msg": "Welcome to sports data analyser API"}));
 
-module.exports = app;
+app.listen(PORT, () => {
+  logger.info(`App is running on port ${PORT}`);
+});
+
+export default app;
