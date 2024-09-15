@@ -7,6 +7,7 @@ import rateLimiter from './config/rate-limiter';
 import RequestLogger from './middleware/request-logger';
 import homeRoute from './routes/home-route';
 import authRoute from './routes/auth-route';
+import memberRoute from './routes/member-route';
 import notFoundHandler from './middleware/not-found-handler';
 import errorHandler from './middleware/error-handler';
 import mongoose from 'mongoose';
@@ -33,6 +34,7 @@ app.use(passport.initialize());
 
 app.use('/', homeRoute);
 app.use('/auth', authRoute);
+app.use('/members', memberRoute);
 
 // handling errors
 app.use(notFoundHandler);

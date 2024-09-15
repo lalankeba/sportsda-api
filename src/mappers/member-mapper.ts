@@ -13,4 +13,8 @@ const mapDocumentToMember = (doc: MemberDocument): Member => {
   };
 };
 
-export { mapDocumentToMember };
+const mapDocumentsToMembers = (docs: MemberDocument[]): Member[] => {
+  return docs.map(doc => mapDocumentToMember(doc));
+}
+
+export { mapDocumentToMember, mapDocumentsToMembers };
