@@ -6,28 +6,40 @@ import Member from "../interfaces/i-member";
 const getMembers = asyncErrorHandler( async (req: Request, res: Response, next: NextFunction) => {
   const page = parseInt(req.query.page as string) || 0;
   const size = Math.min(parseInt(req.query.size as string) || 10, 100);
-  
   const members = await memberService.getMembers(page, size);
   res.status(200).json(members);
 });
 
-const getSelf = async (req: Request, res: Response, next: NextFunction) => {
+const getSelf = asyncErrorHandler( async (req: Request, res: Response, next: NextFunction) => {
   const loggedInMember = req.user as Member;
   const loggedInMemberId = loggedInMember.id;
   const member = await memberService.getSelf(loggedInMemberId);
   res.status(200).json(member);
-}
+});
 
-const getMember = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-      const loggedInMember = req.user as Member;
-      const loggedInMemberId = loggedInMember.id;
-      const memberId = req.params.id;
-      const member = await memberService.getMember(loggedInMemberId, memberId);
-      res.status(200).json(member);
-  } catch (err) {
-      next(err);
-  }
-}
+const getMember = asyncErrorHandler( async (req: Request, res: Response, next: NextFunction) => {
+  const loggedInMember = req.user as Member;
+  const loggedInMemberId = loggedInMember.id;
+  const memberId = req.params.id;
+  const member = await memberService.getMember(loggedInMemberId, memberId);
+  res.status(200).json(member);
+});
 
-export { getMembers, getSelf, getMember };
+const updateSelf = asyncErrorHandler( async (req: Request, res: Response, next: NextFunction) => {
+  const loggedInMember = req.user as Member;
+  const loggedInMemberId = loggedInMember.id;
+  const { firstName, lastName, gender, v } = req.body;
+  const updatedMember = await memberService.updateSelf(loggedInMemberId, firstName, lastName, gender, v);
+  res.status(200).json(updatedMember);
+});
+
+const updateMember = asyncErrorHandler( async (req: Request, res: Response, next: NextFunction) => {
+  const loggedInMember = req.user as Member;
+  const loggedInMemberId = loggedInMember.id;
+  const memberId = req.params.id;
+  const { firstName, lastName, gender, roles, v } = req.body;
+  const updatedMember = await memberService.updateMember(loggedInMemberId, memberId, firstName, lastName, gender, roles, v);
+  res.status(200).json(updatedMember);
+});
+
+export { getMembers, getSelf, getMember, updateSelf, updateMember };

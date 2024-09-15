@@ -9,5 +9,7 @@ const memberRoute = express.Router();
 memberRoute.get('/', authenticateJwt, checkRoles([Role.Admin]), memberController.getMembers);
 memberRoute.get('/member', authenticateJwt, checkRoles([Role.Admin, Role.Instructor, Role.Student]), memberController.getSelf);
 memberRoute.get('/member/:id', authenticateJwt, checkRoles([Role.Admin]), memberController.getMember);
+memberRoute.put('/member', authenticateJwt, checkRoles([Role.Admin, Role.Instructor, Role.Student]), memberController.updateSelf);
+memberRoute.put('/member/:id', authenticateJwt, checkRoles([Role.Admin]), memberController.updateMember);
 
 export default memberRoute;
