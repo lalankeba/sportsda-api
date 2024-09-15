@@ -5,8 +5,12 @@ import MemberModel from "../models/member-model";
 import bcrypt from 'bcryptjs';
 import jsonwebtoken, { SignOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import { mapDocumentToMember } from "../mappers/member-mapper";
+import Member from "../interfaces/i-member";
+import IJwtPayload from '../interfaces/i-jwt-payload';
+import TokenDetails from "../interfaces/i-token-details";
 
-const register = async (firstName: string, lastName: string, email: string, password: string, gender: string) => {
+const register = async (firstName: string, lastName: string, email: string, password: string, gender: string): Promise<Member> => {
   // validate password
   const passwordValidationResult: boolean | any[] = validatePassword(password);
   if (Array.isArray(passwordValidationResult) && passwordValidationResult.length !== 0) { // not a valid password
@@ -14,8 +18,8 @@ const register = async (firstName: string, lastName: string, email: string, pass
   }
 
   // check existing user
-  const existingMember = await MemberModel.findOne({email: email});
-  if (existingMember) {
+  const existingMemberDoc = await MemberModel.findOne({email: email});
+  if (existingMemberDoc) {
       throw new AppError(`Existing member found for the email: ${email}`, 400);
   }
 
@@ -23,7 +27,7 @@ const register = async (firstName: string, lastName: string, email: string, pass
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // save the member in the db
-  const member = await MemberModel.create({ 
+  const memberDocument = await MemberModel.create({ 
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.toLowerCase(),
@@ -32,29 +36,29 @@ const register = async (firstName: string, lastName: string, email: string, pass
   });
 
   logger.info(`Member created for ${firstName} ${lastName}`);
-  return member.toJSON();
+  return mapDocumentToMember(memberDocument.toJSON());
 }
 
-const login = async (email: string, password: string): Promise<string> => {
+const login = async (email: string, password: string): Promise<TokenDetails> => {
   if (!email || !password) {
       throw new AppError('Credentials are required', 400);
   }
 
-  const member = await MemberModel.findOne({ email: email });
-  if (!member) { // no member found for the provided email
+  const memberDoc = await MemberModel.findOne({ email: email });
+  if (!memberDoc) { // no member found for the provided email
       throw new AppError('Credentials are invalid', 400);
   } else {
-      const isMatch = await bcrypt.compare(password, member.password);
+      const isMatch = await bcrypt.compare(password, memberDoc.password);
       if (isMatch) { // valid user
-          const jwtPayload = {
-              jwtid: uuidv4(), email: member.email, roles: member.roles
+          const jwtPayload: IJwtPayload = {
+              jwtid: uuidv4(), email: memberDoc.email, roles: memberDoc.roles
           };
           const JWT_SECRET = process.env.JWT_SECRET as string;
           const options: SignOptions = {
               algorithm: 'HS512', expiresIn: '1d'
           }
           const token = jsonwebtoken.sign( jwtPayload, JWT_SECRET, options );
-          return token;
+          return { token };
       } else { // password does not match
           throw new AppError('Credentials are invalid', 400);
       }

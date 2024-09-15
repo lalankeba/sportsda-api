@@ -1,4 +1,4 @@
-import { model, Schema, Document } from "mongoose";
+import { model, Schema, Document, Types } from "mongoose";
 import Role from "../enums/role";
 import Gender from "../enums/gender";
 
@@ -7,7 +7,8 @@ const MAX_EMAIL_LENGTH = 50;
 const MAX_PASSWORD_LENGTH = 200;
 const MAX_GENDER_LENGTH = 10;
 
-interface IMember extends Document {
+interface MemberDocument extends Document {
+  _id: Types.ObjectId;
   firstName: string;
   lastName: string;
   email: string;
@@ -16,7 +17,7 @@ interface IMember extends Document {
   roles: Role[];
 }
 
-const memberSchema = new Schema<IMember>(
+const memberSchema = new Schema<MemberDocument>(
   {
     firstName: {
       type: String,
@@ -59,16 +60,10 @@ const memberSchema = new Schema<IMember>(
   },
   {
     timestamps: true,
-    toJSON: {
-      transform: function (doc, ret) {
-        delete ret.password;
-        return ret;
-      }
-    }
   }
 );
 
-const MemberModel = model<IMember>('Member', memberSchema);
+const MemberModel = model<MemberDocument>('Member', memberSchema);
 
 export default MemberModel;
-export { IMember };
+export { MemberDocument };

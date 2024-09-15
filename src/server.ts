@@ -10,6 +10,8 @@ import authRoute from './routes/auth-route';
 import notFoundHandler from './middleware/not-found-handler';
 import errorHandler from './middleware/error-handler';
 import mongoose from 'mongoose';
+import configurePassport from './config/passport-config';
+import passport from 'passport';
 
 const app = express();
 const port: number = parseInt(process.env.PORT || '3010', 10);
@@ -21,10 +23,13 @@ const corsOptions = {
   credentials: true
 }
 
+configurePassport(passport);
+
 app.use(cors(corsOptions));
 app.use(rateLimiter);
 app.use(RequestLogger);
 app.use(express.json());
+app.use(passport.initialize());
 
 app.use('/', homeRoute);
 app.use('/auth', authRoute);
