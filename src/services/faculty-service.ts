@@ -28,7 +28,7 @@ const getFaculty = async (facultyId: string): Promise<Faculty> => {
 }
 
 const addFaculty = async (name: string): Promise<Faculty> => {
-  const existingFacultyDoc = await FacultyModel.findOne({name: name});
+  const existingFacultyDoc = await FacultyModel.findOne({name: name, status: DocumentStatus.Active});
   if (existingFacultyDoc) {
       throw new AppError(`Existing faculty found for the name: ${name}`, 400);
   }
