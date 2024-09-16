@@ -15,6 +15,8 @@ interface MemberDocument extends Document {
   password: string;
   gender: Gender;
   roles: Role[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const memberSchema = new Schema<MemberDocument>(

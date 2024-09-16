@@ -9,6 +9,8 @@ const mapDocumentToMember = (doc: MemberDocument): Member => {
     email: doc.email,
     gender: doc.gender,
     roles: doc.roles,
+    createdAt: doc.createdAt,
+    updatedAt: doc.updatedAt,
     v: doc.__v
   };
 };

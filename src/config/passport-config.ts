@@ -3,6 +3,7 @@ import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from 'passport-j
 import MemberModel, { MemberDocument } from '../models/member-model';
 import { mapDocumentToMember } from '../mappers/member-mapper';
 import IJwtPayload from '../interfaces/i-jwt-payload';
+import logger from './logger-config';
 
 const opts: StrategyOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -20,7 +21,7 @@ const configurePassport = (passport: PassportStatic) => {
         }
         return done(null, false);
       } catch (err) {
-        console.log(err);
+        logger.error(err);
         return done(err, false);
       }
     })

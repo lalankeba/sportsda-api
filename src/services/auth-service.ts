@@ -36,7 +36,7 @@ const register = async (firstName: string, lastName: string, email: string, pass
   });
 
   logger.info(`Member created for ${firstName} ${lastName}`);
-  return mapDocumentToMember(memberDocument.toJSON());
+  return mapDocumentToMember(memberDocument);
 }
 
 const login = async (email: string, password: string): Promise<TokenDetails> => {

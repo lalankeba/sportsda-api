@@ -8,6 +8,8 @@ interface Member {
   email: string;
   gender: Gender;
   roles: Role[];
+  createdAt: Date;
+  updatedAt: Date;
   v: number;
 }
 
