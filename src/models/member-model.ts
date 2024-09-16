@@ -1,6 +1,7 @@
 import { model, Schema, Document, Types } from "mongoose";
 import Role from "../enums/role";
 import Gender from "../enums/gender";
+import { MemberFaculty } from "../interfaces/i-member";
 
 const MAX_NAME_LENGTH = 20;
 const MAX_EMAIL_LENGTH = 50;
@@ -15,9 +16,18 @@ interface MemberDocument extends Document {
   password: string;
   gender: Gender;
   roles: Role[];
+  faculty: MemberFaculty;
   createdAt: Date;
   updatedAt: Date;
 }
+
+const memberFacultySchema = new Schema(
+  {
+      id: { type: String, required: true, ref: 'Faculty' },
+      name: { type: String, required: true }
+  },
+  { _id: false }
+);
 
 const memberSchema = new Schema<MemberDocument>(
   {
@@ -58,6 +68,10 @@ const memberSchema = new Schema<MemberDocument>(
       type: [String],
       enum: Object.values(Role),
       default: [Role.Student]
+    },
+    faculty: {
+      type: memberFacultySchema,
+      required: [true, 'Valid faculty is required.']
     }
   },
   {

@@ -3,8 +3,8 @@ import asyncErrorHandler from "../utils/async-error-handler";
 import * as authService from "../services/auth-service";
 
 const register = asyncErrorHandler( async (req: Request, res: Response, next: NextFunction) => {
-  const { firstName, lastName, gender, email, password } = req.body;
-  const resp = await authService.register(firstName, lastName, email, password, gender);
+  const { firstName, lastName, gender, email, password, facultyId } = req.body;
+  const resp = await authService.register(firstName, lastName, email, password, gender, facultyId);
   res.status(200).json(resp);
 });
 

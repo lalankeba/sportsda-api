@@ -6,11 +6,12 @@ import bcrypt from 'bcryptjs';
 import jsonwebtoken, { SignOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 import { mapDocumentToMember } from "../mappers/member-mapper";
-import Member from "../interfaces/i-member";
+import Member, { MemberFaculty } from "../interfaces/i-member";
 import IJwtPayload from '../interfaces/i-jwt-payload';
 import TokenDetails from "../interfaces/i-token-details";
+import FacultyModel from "../models/faculty-model";
 
-const register = async (firstName: string, lastName: string, email: string, password: string, gender: string): Promise<Member> => {
+const register = async (firstName: string, lastName: string, email: string, password: string, gender: string, facultyId: string): Promise<Member> => {
   // validate password
   const passwordValidationResult: boolean | any[] = validatePassword(password);
   if (Array.isArray(passwordValidationResult) && passwordValidationResult.length !== 0) { // not a valid password
@@ -23,6 +24,17 @@ const register = async (firstName: string, lastName: string, email: string, pass
       throw new AppError(`Existing member found for the email: ${email}`, 400);
   }
 
+  // get attached faculty
+  const facultyDoc = await FacultyModel.findById(facultyId);
+  if (!facultyDoc) {
+    throw new AppError(`Cannot find the faculty. Faculty id ${facultyId} is invalid.`, 400);
+  }
+
+  const memberFaculty: MemberFaculty = {
+    id: facultyDoc.id,
+    name: facultyDoc.name
+  }
+
   // get the hash of the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -32,7 +44,8 @@ const register = async (firstName: string, lastName: string, email: string, pass
       lastName: lastName.trim(),
       email: email.toLowerCase(),
       password: hashedPassword,
-      gender
+      gender,
+      faculty: memberFaculty
   });
 
   logger.info(`Member created for ${firstName} ${lastName}`);
