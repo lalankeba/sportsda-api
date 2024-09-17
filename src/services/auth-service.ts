@@ -10,6 +10,7 @@ import Member, { MemberFaculty } from "../interfaces/i-member";
 import IJwtPayload from '../interfaces/i-jwt-payload';
 import TokenDetails from "../interfaces/i-token-details";
 import FacultyModel from "../models/faculty-model";
+import { validateDocId } from "../validators/common-validator";
 
 const register = async (firstName: string, lastName: string, email: string, password: string, gender: string, facultyId: string): Promise<Member> => {
   // validate password
@@ -25,6 +26,7 @@ const register = async (firstName: string, lastName: string, email: string, pass
   }
 
   // get attached faculty
+  validateDocId(facultyId);
   const facultyDoc = await FacultyModel.findById(facultyId);
   if (!facultyDoc) {
     throw new AppError(`Cannot find the faculty. Faculty id ${facultyId} is invalid.`, 400);

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import AppError from "../errors/app-error";
 
 const validatePaginationDetails = (page: number, size: number): boolean => {
@@ -20,4 +21,11 @@ const validateSize = (size: number): boolean => {
   return true;
 }
 
-export { validatePaginationDetails };
+const validateDocId = (id: string): boolean => {
+  if (!Types.ObjectId.isValid(id)) {
+    throw new AppError(`${id} is not in valid ID format`, 400);
+  }
+  return true;
+}
+
+export { validatePaginationDetails, validateDocId };

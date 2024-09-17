@@ -13,8 +13,6 @@ const getFaculties = async (page: number, size: number): Promise<Faculty[]> => {
     .skip(page * size)
     .limit(size);
 
-  logger.info(facultyDocs);
-
   return mapDocumentsToFaculties(facultyDocs);
 }
 
