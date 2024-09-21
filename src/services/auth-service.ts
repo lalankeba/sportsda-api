@@ -69,8 +69,9 @@ const login = async (email: string, password: string): Promise<TokenDetails> => 
               jwtid: uuidv4(), email: memberDoc.email, roles: memberDoc.roles
           };
           const JWT_SECRET = process.env.JWT_SECRET as string;
+          const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1d';
           const options: SignOptions = {
-              algorithm: 'HS512', expiresIn: '1d'
+              algorithm: 'HS512', expiresIn: JWT_EXPIRES_IN
           }
           const token = jsonwebtoken.sign( jwtPayload, JWT_SECRET, options );
           return { token };
