@@ -80,7 +80,7 @@ const updateMember = async (loggedInMemberId: string, memberId: string, firstNam
 }
 
 const getAnyMember = async (memberId: string): Promise<Member> => {
-  const memberDoc = await MemberModel.findById(memberId, { firstName: 1, lastName: 1, gender: 1, email: 1, roles: 1, __v: 1, createdAt: 1, updatedAt: 1 });
+  const memberDoc = await MemberModel.findById(memberId, { firstName: 1, lastName: 1, gender: 1, email: 1, roles: 1, faculty: 1, __v: 1, createdAt: 1, updatedAt: 1 });
   if (memberDoc) {
       return mapDocumentToMember(memberDoc);
   } else {
