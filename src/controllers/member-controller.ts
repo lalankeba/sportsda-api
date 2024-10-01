@@ -28,8 +28,8 @@ const getMember = asyncErrorHandler( async (req: Request, res: Response, next: N
 const updateSelf = asyncErrorHandler( async (req: Request, res: Response, next: NextFunction) => {
   const loggedInMember = req.user as Member;
   const loggedInMemberId = loggedInMember.id;
-  const { firstName, lastName, gender, v } = req.body;
-  const updatedMember = await memberService.updateSelf(loggedInMemberId, firstName, lastName, gender, v);
+  const { firstName, lastName, gender, facultyId, v } = req.body;
+  const updatedMember = await memberService.updateSelf(loggedInMemberId, firstName, lastName, gender, facultyId, v);
   res.status(200).json(updatedMember);
 });
 

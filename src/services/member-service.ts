@@ -1,10 +1,11 @@
-import Member from "../interfaces/i-member";
+import Member, { MemberFaculty } from "../interfaces/i-member";
 import MemberModel, { MemberDocument } from "../models/member-model";
-import { validatePaginationDetails } from "../validators/common-validator";
+import { validateDocId, validatePaginationDetails } from "../validators/common-validator";
 import { mapDocumentsToMembers, mapDocumentToMember } from "../mappers/member-mapper";
 import AppError from "../errors/app-error";
 import Gender from "../enums/gender";
 import Role from "../enums/role";
+import FacultyModel from "../models/faculty-model";
 
 const getMembers = async (page: number, size: number): Promise<Member[]> => {
   validatePaginationDetails(page, size);
@@ -27,7 +28,7 @@ const getMember = async (loggedInMemberId: string, memberId: string): Promise<Me
   return getAnyMember(memberId);
 }
 
-const updateSelf = async (loggedInMemberId: string, firstName: string, lastName: string, gender: Gender, v: number): Promise<Member> => {
+const updateSelf = async (loggedInMemberId: string, firstName: string, lastName: string, gender: Gender, facultyId: string, v: number): Promise<Member> => {
   const memberDoc: MemberDocument | null = await MemberModel.findById(loggedInMemberId);
 
   if (!memberDoc) {
@@ -38,9 +39,20 @@ const updateSelf = async (loggedInMemberId: string, firstName: string, lastName:
     throw new AppError(`Member has been modified by another process. Please refresh and try again.`, 409);
   }
 
+  validateDocId(facultyId);
+  const facultyDoc = await FacultyModel.findById(facultyId);
+  if (!facultyDoc) {
+    throw new AppError(`Cannot find the faculty. Faculty id ${facultyId} is invalid.`, 400);
+  }
+
+  const memberFaculty: MemberFaculty = {
+    id: facultyDoc.id,
+    name: facultyDoc.name
+  }
+
   const updatedMemberDoc = await MemberModel.findByIdAndUpdate(
     loggedInMemberId,
-    { $set: { firstName, lastName, gender }, $inc: { __v: 1 } },
+    { $set: { firstName, lastName, gender, faculty: memberFaculty }, $inc: { __v: 1 } },
     { new: true }
   );
   
