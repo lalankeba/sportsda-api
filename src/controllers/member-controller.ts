@@ -37,8 +37,8 @@ const updateMember = asyncErrorHandler( async (req: Request, res: Response, next
   const loggedInMember = req.user as Member;
   const loggedInMemberId = loggedInMember.id;
   const memberId = req.params.id;
-  const { firstName, lastName, gender, roles, v } = req.body;
-  const updatedMember = await memberService.updateMember(loggedInMemberId, memberId, firstName, lastName, gender, roles, v);
+  const { firstName, lastName, gender, roles, facultyId, v } = req.body;
+  const updatedMember = await memberService.updateMember(loggedInMemberId, memberId, firstName, lastName, gender, roles, facultyId, v);
   res.status(200).json(updatedMember);
 });
 

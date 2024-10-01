@@ -63,7 +63,7 @@ const updateSelf = async (loggedInMemberId: string, firstName: string, lastName:
   return mapDocumentToMember(updatedMemberDoc);
 }
 
-const updateMember = async (loggedInMemberId: string, memberId: string, firstName: string, lastName: string, gender: Gender, roles: Role[], v: number): Promise<Member> => {
+const updateMember = async (loggedInMemberId: string, memberId: string, firstName: string, lastName: string, gender: Gender, roles: Role[], facultyId: string, v: number): Promise<Member> => {
   if (loggedInMemberId === memberId) {
       throw new AppError(`Access denied. Use self API to update yourself`, 401);
   }
@@ -78,9 +78,20 @@ const updateMember = async (loggedInMemberId: string, memberId: string, firstNam
       throw new AppError(`Member has been modified by another process. Please refresh and try again.`, 409);
   }
 
+  validateDocId(facultyId);
+  const facultyDoc = await FacultyModel.findById(facultyId);
+  if (!facultyDoc) {
+    throw new AppError(`Cannot find the faculty. Faculty id ${facultyId} is invalid.`, 400);
+  }
+
+  const memberFaculty: MemberFaculty = {
+    id: facultyDoc.id,
+    name: facultyDoc.name
+  }
+
   const updatedMemberDoc = await MemberModel.findByIdAndUpdate(
     memberId,
-    { $set: { firstName, lastName, gender, roles }, $inc: { __v: 1 } },
+    { $set: { firstName, lastName, gender, roles, faculty: memberFaculty }, $inc: { __v: 1 } },
     { new: true }
   );
   
