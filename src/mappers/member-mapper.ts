@@ -4,11 +4,8 @@ import { MemberDocument } from "../models/member-model";
 const mapDocumentToMember = (doc: MemberDocument): Member => {
   return {
     id: doc._id.toString(),
-    firstName: doc.firstName,
-    lastName: doc.lastName,
-    email: doc.email,
+    userId: doc.userId,
     gender: doc.gender,
-    roles: doc.roles,
     faculty: doc.faculty,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,

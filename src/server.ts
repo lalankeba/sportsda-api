@@ -6,14 +6,12 @@ import logger from './config/logger-config';
 import rateLimiter from './config/rate-limiter';
 import RequestLogger from './middleware/request-logger';
 import homeRoute from './routes/home-route';
-import authRoute from './routes/auth-route';
 import memberRoute from './routes/member-route';
 import facultyRoute from './routes/faculty-route';
 import notFoundHandler from './middleware/not-found-handler';
 import errorHandler from './middleware/error-handler';
 import mongoose from 'mongoose';
-import configurePassport from './config/passport-config';
-import passport from 'passport';
+import { clerkMiddleware } from '@clerk/express';
 
 const app = express();
 const port: number = parseInt(process.env.PORT || '3010', 10);
@@ -25,16 +23,13 @@ const corsOptions = {
   credentials: true
 }
 
-configurePassport(passport);
-
 app.use(cors(corsOptions));
 app.use(rateLimiter);
 app.use(RequestLogger);
 app.use(express.json());
-app.use(passport.initialize());
+app.use(clerkMiddleware());
 
 app.use('/', homeRoute);
-app.use('/auth', authRoute);
 app.use('/members', memberRoute);
 app.use('/faculties', facultyRoute);
 
