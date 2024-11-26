@@ -5,8 +5,11 @@ const mapDocumentToMember = (doc: MemberDocument): Member => {
   return {
     id: doc._id.toString(),
     userId: doc.userId,
+    indexNo: doc.indexNo,
     gender: doc.gender,
     faculty: doc.faculty,
+    province: doc.province,
+    school: doc.school,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
     v: doc.__v

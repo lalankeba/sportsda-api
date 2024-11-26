@@ -5,6 +5,7 @@ import { mapDocumentsToMembers, mapDocumentToMember } from "../mappers/member-ma
 import AppError from "../errors/app-error";
 import Gender from "../enums/gender";
 import FacultyModel from "../models/faculty-model";
+import Province from "../enums/province";
 
 const getMembers = async (page: number, size: number): Promise<Member[]> => {
   validatePaginationDetails(page, size);
@@ -27,7 +28,7 @@ const getMember = async (loggedInUserId: string, memberId: string): Promise<Memb
   return getAnyMember(memberId);
 }
 
-const updateSelf = async (loggedInUserId: string, gender: Gender, facultyId: string, v: number): Promise<Member> => {
+const updateSelf = async (loggedInUserId: string, indexNo: string, gender: Gender, facultyId: string, province: Province, school: string, v: number): Promise<Member> => {
   const memberDoc: MemberDocument | null = await MemberModel.findOne({ userId: loggedInUserId });
 
   validateDocId(facultyId);
@@ -45,8 +46,11 @@ const updateSelf = async (loggedInUserId: string, gender: Gender, facultyId: str
   if (!memberDoc) { // first time profile update
     updatedMemberDoc = await MemberModel.create({
       userId: loggedInUserId,
+      indexNo,
       gender,
-      faculty: memberFaculty
+      faculty: memberFaculty,
+      province,
+      school
     });
 
   } else { // update after created member in our db
@@ -56,7 +60,7 @@ const updateSelf = async (loggedInUserId: string, gender: Gender, facultyId: str
 
     updatedMemberDoc = await MemberModel.findOneAndUpdate(
       { userId: loggedInUserId },
-      { $set: { gender, faculty: memberFaculty }, $inc: { __v: 1 } },
+      { $set: { indexNo, gender, faculty: memberFaculty, province, school }, $inc: { __v: 1 } },
       { new: true }
     );
     
@@ -107,7 +111,7 @@ const updateMember = async (loggedInUserId: string, userId: string, gender: Gend
 }
 
 const getAnyMember = async (userId: string): Promise<Member> => {
-  const memberDoc = await MemberModel.findOne({userId}, { userId: 1, gender: 1, faculty: 1, __v: 1, createdAt: 1, updatedAt: 1 });
+  const memberDoc = await MemberModel.findOne({userId}, { userId: 1, indexNo: 1, gender: 1, faculty: 1, province: 1, school: 1, __v: 1, createdAt: 1, updatedAt: 1 });
   if (memberDoc) {
       return mapDocumentToMember(memberDoc);
   } else {
