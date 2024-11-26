@@ -1,5 +1,5 @@
 import Gender from "../enums/gender";
-import Role from "../enums/role";
+import Province from "../enums/province";
 
 interface MemberFaculty {
   id: string;
@@ -9,8 +9,11 @@ interface MemberFaculty {
 interface Member {
   id: string;
   userId: string;
+  indexNo: string;
   gender: Gender;
   faculty: MemberFaculty;
+  province: Province;
+  school: string;
   createdAt: Date;
   updatedAt: Date;
   v: number;
