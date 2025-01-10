@@ -1,10 +1,11 @@
 # Sports data analyser API
 
-<p align="center">
-  <a href="https://github.com/lalankeba/recipe-share-api/blob/main/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue" alt="Recipe Share API is released under the MIT license." >
-  </a>
-</p>
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/lalankeba/recipe-share-api/blob/main/LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-green?logo=node.js)](https://nodejs.org)
+![Express.js](https://img.shields.io/badge/Express.js-404D59?logo=express)
+![MongoDB](https://img.shields.io/badge/MongoDB-green?logo=mongodb)
+![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)
 
 This project is built with Node.js. It provides a simple API for managing sports data. The application supports user authentication through JSON Web Tokens (JWT), ensuring secure access to various functionalities based on user roles.
 
