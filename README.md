@@ -2,10 +2,10 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/lalankeba/recipe-share-api/blob/main/LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-green?logo=node.js)](https://nodejs.org)
-![Express.js](https://img.shields.io/badge/Express.js-404D59?logo=express)
-![MongoDB](https://img.shields.io/badge/MongoDB-green?logo=mongodb)
-![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)
-![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)
+[![Express.js](https://img.shields.io/badge/Express.js-404D59?logo=express)](https://expressjs.com)
+[![MongoDB](https://img.shields.io/badge/MongoDB-green?logo=mongodb)](https://www.mongodb.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-blue?logo=typescript)](https://www.typescriptlang.org)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://vercel.com)
 
 This project is built with Node.js. It provides a simple API for managing sports data. The application supports user authentication through JSON Web Tokens (JWT), ensuring secure access to various functionalities based on user roles.
 
