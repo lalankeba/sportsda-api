@@ -1,6 +1,7 @@
 # Sports data analyser API
 
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/lalankeba/recipe-share-api/blob/main/LICENSE)
+[![Codecov](https://codecov.io/gh/lalankeba/sportsda-api/branch/graph/badge.svg)](https://codecov.io/gh/lalankeba/sportsda-api)
 ![Codecov](https://codecov.io/gh/lalankeba/sportsda-api/main/graph/badge.svg)
 [![Node.js](https://img.shields.io/badge/Node.js-green?logo=node.js)](https://nodejs.org)
 [![Express.js](https://img.shields.io/badge/Express.js-404D59?logo=express)](https://expressjs.com)
@@ -30,7 +31,6 @@ This project is built with Node.js. It provides a simple API for managing sports
 ```
 DB_URI="<connection-string>"
 PORT=<desired-port>
-JWT_SECRET=<secret-key>
 ```
 5. Start the server: `npm run dev`
 
